@@ -1,0 +1,27 @@
+version: '3'
+services:
+  server-1:
+    image: go-server
+    container_name: server-1
+    environment:
+      - PORT=50051
+    ports:
+    - 50051:50051
+  server-2:
+    image: go-server
+    container_name: server-2
+    environment:
+      - PORT=50052
+    ports:
+    - 50052:50052
+  l5d:
+    image: buoyantio/linkerd:1.3.6
+    container_name: linkerd
+    ports:
+    - 4140:4140
+    - 9990:9990
+    volumes:
+    - ./linkerd/linkerd.yaml:/io.buoyant/linkerd.yaml:ro
+    - ./linkerd/disco:/io.buoyant/disco
+    command: >
+      /io.buoyant/linkerd.yaml
